@@ -6,13 +6,42 @@ import {
   changeQuantity,
   remove,
   selectCart,
+  addToCart,
 } from "../../../redux/features/cartSlice";
 import "./index.scss";
+import { useBroadcastChannel } from "../../../hooks/useBroadcastChannel";
+import type { Product } from "../../../models/Product";
+import { useEffect, useState } from "react";
 
 function Checkout() {
   const navigate = useNavigate();
   const cartItems: CartItem[] = useSelector(selectCart);
   const dispartch = useDispatch();
+  const broadCastAddtoCart = useBroadcastChannel<Product>("add-to-cart");
+  const [voucherCode, setVoucherCode] = useState<number>(0);
+
+  // Danh sách voucher mẫu
+  const vouchers = [
+    { code: "", label: "Chọn voucher giảm giá", value: 0 },
+    { code: "GIAM10K", label: "Giảm 10 %", value: 10 },
+    { code: "GIAM20K", label: "Giảm 20 %", value: 20 },
+    { code: "FREESHIP", label: "Giảm 30 % (Freeship)", value: 30 },
+  ];
+
+  useEffect(() => {
+    if (broadCastAddtoCart.message) {
+      console.log(
+        "Nhận sản phẩm từ kênh broadcast:",
+        broadCastAddtoCart.message
+      );
+      dispartch(
+        addToCart({
+          ...broadCastAddtoCart.message,
+          discountPercent: voucherCode,
+        })
+      );
+    }
+  }, [broadCastAddtoCart.message]);
 
   const updateQuantity = (id: string, quantity: number) => {
     dispartch(changeQuantity({ id, quantity }));
@@ -78,7 +107,7 @@ function Checkout() {
   const totalDiscount = calculateTotalDiscount();
   const shippingFee = subtotal > 200000 ? 0 : 30000; // Miễn phí ship từ 200k
   const tax = Math.round(subtotal * 0.1); // VAT 10%
-  const grandTotal = subtotal + shippingFee + tax;
+  const grandTotal = (subtotal + shippingFee + tax) * (voucherCode / 100);
 
   return (
     <div className="checkout-page">
@@ -217,6 +246,21 @@ function Checkout() {
                 <div className="summary-row">
                   <span>VAT (10%):</span>
                   <span>{formatPrice(tax.toString())}</span>
+                </div>
+                {/* Voucher select */}
+                <div className="voucher-row">
+                  <label htmlFor="voucher-select">Mã giảm giá:</label>
+                  <select
+                    id="voucher-select"
+                    value={voucherCode}
+                    onChange={(e) => setVoucherCode(Number(e.target.value))}
+                  >
+                    {vouchers.map((v) => (
+                      <option key={v.code} value={v.value}>
+                        {v.label}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 <div className="summary-row total">

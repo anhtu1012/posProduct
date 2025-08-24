@@ -1,3 +1,30 @@
+// Style for voucher row
+.voucher-row {
+  display: flex;
+  align-items: center;
+  margin-top: 16px;
+  gap: 8px;
+
+  label {
+    font-weight: 500;
+    margin-right: 8px;
+    color: #333;
+    min-width: 90px;
+  }
+
+  select {
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    background: #fff;
+    transition: border-color 0.2s;
+    &:focus {
+      border-color: #007bff;
+      outline: none;
+    }
+  }
+}
 .checkout-page {
   min-height: 100vh;
   background: #f8f9fa;
@@ -21,14 +48,14 @@
       position: relative;
 
       &::after {
-        content: '';
+        content: "";
         position: absolute;
         bottom: -8px;
         left: 50%;
         transform: translateX(-50%);
         width: 80px;
         height: 4px;
-        background: linear-gradient(135deg, #8B4513, #A0522D);
+        background: linear-gradient(135deg, #8b4513, #a0522d);
         border-radius: 2px;
       }
 
@@ -120,7 +147,7 @@
 
       .item-info {
         .item-category {
-          color: #8B4513;
+          color: #8b4513;
           font-size: 12px;
           font-weight: 500;
           text-transform: uppercase;
@@ -165,7 +192,7 @@
           .current-price {
             font-size: 16px;
             font-weight: 700;
-            color: #8B4513;
+            color: #8b4513;
           }
 
           .original-price {
@@ -219,7 +246,7 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
             &:hover:not(:disabled) {
-              background: #8B4513;
+              background: #8b4513;
               color: white;
               transform: scale(1.1);
             }
@@ -246,7 +273,7 @@
         .item-total {
           font-size: 18px;
           font-weight: 700;
-          color: #8B4513;
+          color: #8b4513;
           text-align: center;
 
           @media (max-width: 768px) {
@@ -328,7 +355,7 @@
 
           &.total {
             padding: 16px 0;
-            border-top: 2px solid #8B4513;
+            border-top: 2px solid #8b4513;
             margin-top: 12px;
 
             span {
@@ -337,7 +364,7 @@
             }
 
             span:last-child {
-              color: #8B4513;
+              color: #8b4513;
             }
           }
 
@@ -369,8 +396,8 @@
 
         .continue-shopping-btn {
           background: transparent;
-          border: 2px solid #8B4513;
-          color: #8B4513;
+          border: 2px solid #8b4513;
+          color: #8b4513;
           padding: 12px 24px;
           border-radius: 12px;
           font-size: 14px;
@@ -379,13 +406,13 @@
           transition: all 0.3s ease;
 
           &:hover {
-            background: #8B4513;
+            background: #8b4513;
             color: white;
           }
         }
 
         .checkout-btn {
-          background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+          background: linear-gradient(135deg, #8b4513 0%, #a0522d 100%);
           border: none;
           color: white;
           padding: 16px 24px;

@@ -4,7 +4,7 @@ export interface Product {
   categoryId: string;
   image: string;
   price: string;
-  discountPercent?: string;
+  discountPercent?: number;
   description: string;
   rating: number;
   reviews: number;

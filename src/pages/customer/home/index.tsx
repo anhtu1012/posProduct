@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ProductCard from "../../../components/Product/ProductCard";
 import type { Product } from "../../../models/Product";
 import "./index.scss";
@@ -6,10 +6,20 @@ import { getProducts } from "../../../services/customer/home/api";
 import ProductListToCategory from "../../../components/Product/ProductListToCategory";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../../redux/features/cartSlice";
+import { useBroadcastChannel } from "../../../hooks/useBroadcastChannel";
 
 function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const dispartch = useDispatch();
+  const broadCastAddtoCart = useBroadcastChannel<Product>("add-to-cart");
+
+  const handleSendMessage = useCallback(
+    (product: Product) => {
+      broadCastAddtoCart.sendMessage(product);
+    },
+    [broadCastAddtoCart]
+  );
+
   const fetchProducts = async () => {
     try {
       const response = await getProducts();
@@ -24,6 +34,7 @@ function Home() {
 
   const handleAddToCart = (product: Product) => {
     console.log("Thêm vào giỏ hàng:", product);
+    handleSendMessage(product);
     dispartch(addToCart(product));
   };
 
