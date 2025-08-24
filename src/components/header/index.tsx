@@ -34,7 +34,7 @@ function Header() {
     <header className="header">
       <div className="header-container">
         <div className="logo" onClick={() => navigate("/")}>
-          <h2>☕ CafeShop</h2>
+          <h2>☕ sdsadsadsadsa</h2>
         </div>
 
         <nav className="navigation">
