@@ -31,7 +31,7 @@ function Home() {
     <div className="home-page">
       <section className="hero-section">
         <div className="hero-content" data-aos="fade-up">
-          <h1>☕ Thưởng thức hương vị cafe tuyệt vời</h1>
+          <h1>☕ Thưởng thức hương vị cafe tuyệt là vời</h1>
           <p>
             Khám phá menu đa dạng từ cafe truyền thống đến các loại đồ uống hiện
             đại
