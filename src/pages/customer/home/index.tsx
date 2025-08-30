@@ -1,17 +1,29 @@
 import { useCallback, useEffect, useState } from "react";
-import ProductCard from "../../../components/Product/ProductCard";
-import type { Product } from "../../../models/Product";
-import "./index.scss";
-import { getProducts } from "../../../services/customer/home/api";
-import ProductListToCategory from "../../../components/Product/ProductListToCategory";
 import { useDispatch } from "react-redux";
-import { addToCart } from "../../../redux/features/cartSlice";
+import ProductCard from "../../../components/Product/ProductCard";
+import ProductListToCategory from "../../../components/Product/ProductListToCategory";
 import { useBroadcastChannel } from "../../../hooks/useBroadcastChannel";
+import useSocket from "../../../hooks/useSocket";
+import type { Product } from "../../../models/Product";
+import { addToCart } from "../../../redux/features/cartSlice";
+import { getProducts } from "../../../services/customer/home/api";
+import "./index.scss";
 
 function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const dispartch = useDispatch();
   const broadCastAddtoCart = useBroadcastChannel<Product>("add-to-cart");
+  const socket = useSocket();
+
+  useEffect(() => {
+    const handleGetProducts = (data: Product[]) => {
+      console.log("Received products via socket:", data);
+      // setProducts(data);
+    };
+    socket.on("PRODUCT_KEY", handleGetProducts);
+  }, [socket, socket.connected]);
+
+  console.log("Socket ID:", socket);
 
   const handleSendMessage = useCallback(
     (product: Product) => {

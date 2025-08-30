@@ -3,8 +3,8 @@ export interface CartItem {
   name: string;
   categoryId: string;
   image: string;
-  price: string;
-  discountPercent?: string;
+  price: number;
+  discountPercent?: number;
   description: string;
   quantity: number;
 }

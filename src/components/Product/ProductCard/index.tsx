@@ -3,6 +3,7 @@ import { HeartIcon as HeartSolidIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import "./ProductCard.scss";
 import type { Product } from "../../../models/Product";
+import { formatPrice } from "../../../utils/formatPrice";
 
 interface ProductCardProps {
   product: Product;
@@ -18,19 +19,9 @@ function ProductCard({ product, onAddToCart }: ProductCardProps) {
     }
   };
 
-  const formatPrice = (price: string) => {
-    const numPrice = parseInt(price);
-    return new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
-    }).format(numPrice);
-  };
-
-  const calculateOriginalPrice = (price: string, discountPercent?: string) => {
+  const calculateOriginalPrice = (price: number, discountPercent?: number) => {
     if (!discountPercent) return null;
-    const numPrice = parseInt(price);
-    const discount = parseInt(discountPercent);
-    const originalPrice = Math.round(numPrice / (1 - discount / 100));
+    const originalPrice = Math.round(price / (1 - discountPercent / 100));
     return originalPrice;
   };
 
@@ -83,7 +74,7 @@ function ProductCard({ product, onAddToCart }: ProductCardProps) {
 
   const originalPrice = calculateOriginalPrice(
     product.price,
-    product.discountPercent
+    product?.discountPercent
   );
 
   return (
@@ -122,9 +113,7 @@ function ProductCard({ product, onAddToCart }: ProductCardProps) {
         <div className="price-section">
           <div className="current-price">{formatPrice(product.price)}</div>
           {originalPrice && (
-            <div className="original-price">
-              {formatPrice(originalPrice.toString())}
-            </div>
+            <div className="original-price">{formatPrice(originalPrice)}</div>
           )}
         </div>
 

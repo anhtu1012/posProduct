@@ -12,6 +12,7 @@ import "./index.scss";
 import { useBroadcastChannel } from "../../../hooks/useBroadcastChannel";
 import type { Product } from "../../../models/Product";
 import { useEffect, useState } from "react";
+import { formatPrice } from "../../../utils/formatPrice";
 
 function Checkout() {
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ function Checkout() {
         })
       );
     }
-  }, [broadCastAddtoCart.message]);
+  }, [broadCastAddtoCart.message, dispartch, voucherCode]);
 
   const updateQuantity = (id: string, quantity: number) => {
     dispartch(changeQuantity({ id, quantity }));
@@ -64,22 +65,13 @@ function Checkout() {
     return categoryMap[categoryId] || categoryId;
   };
 
-  const formatPrice = (price: string) => {
-    const numPrice = parseInt(price);
-    return new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
-    }).format(numPrice);
-  };
-
   const calculateDiscountedPrice = (
-    price: string,
-    discountPercent?: string
+    price: number,
+    discountPercent?: number
   ) => {
-    const numPrice = parseInt(price);
-    if (!discountPercent) return numPrice;
-    const discount = parseInt(discountPercent);
-    return Math.round(numPrice * (1 - discount / 100));
+    if (!discountPercent) return price;
+    const discount = discountPercent;
+    return Math.round(price * (1 - discount / 100));
   };
 
   const calculateSubtotal = () => {
@@ -94,12 +86,11 @@ function Checkout() {
 
   const calculateTotalDiscount = () => {
     return cartItems.reduce((total, item) => {
-      const originalPrice = parseInt(item.price);
       const discountedPrice = calculateDiscountedPrice(
         item.price,
         item.discountPercent
       );
-      const discount = (originalPrice - discountedPrice) * item.quantity;
+      const discount = (item.price - discountedPrice) * item.quantity;
       return total + discount;
     }, 0);
   };
@@ -153,7 +144,7 @@ function Checkout() {
 
                         <div className="item-price">
                           <span className="current-price">
-                            {formatPrice(discountedPrice.toString())}
+                            {formatPrice(discountedPrice)}
                           </span>
                           {item.discountPercent && (
                             <>
@@ -191,9 +182,7 @@ function Checkout() {
                         </div>
 
                         <div className="item-total">
-                          {formatPrice(
-                            (discountedPrice * item.quantity).toString()
-                          )}
+                          {formatPrice(discountedPrice * item.quantity)}
                         </div>
 
                         <button
@@ -217,35 +206,31 @@ function Checkout() {
               <div className="summary-details">
                 <div className="summary-row">
                   <span>Tạm tính:</span>
-                  <span>
-                    {formatPrice((subtotal + totalDiscount).toString())}
-                  </span>
+                  <span>{formatPrice(subtotal + totalDiscount)}</span>
                 </div>
 
                 {totalDiscount > 0 && (
                   <div className="summary-row discount">
                     <span>Giảm giá:</span>
-                    <span>-{formatPrice(totalDiscount.toString())}</span>
+                    <span>-{formatPrice(totalDiscount)}</span>
                   </div>
                 )}
 
                 <div className="summary-row">
                   <span>Sau giảm giá:</span>
-                  <span>{formatPrice(subtotal.toString())}</span>
+                  <span>{formatPrice(subtotal)}</span>
                 </div>
 
                 <div className="summary-row">
                   <span>Phí vận chuyển:</span>
                   <span className={shippingFee === 0 ? "free" : ""}>
-                    {shippingFee === 0
-                      ? "Miễn phí"
-                      : formatPrice(shippingFee.toString())}
+                    {shippingFee === 0 ? "Miễn phí" : formatPrice(shippingFee)}
                   </span>
                 </div>
 
                 <div className="summary-row">
                   <span>VAT (10%):</span>
-                  <span>{formatPrice(tax.toString())}</span>
+                  <span>{formatPrice(tax)}</span>
                 </div>
                 {/* Voucher select */}
                 <div className="voucher-row">
@@ -265,14 +250,14 @@ function Checkout() {
 
                 <div className="summary-row total">
                   <span>Tổng cộng:</span>
-                  <span>{formatPrice(grandTotal.toString())}</span>
+                  <span>{formatPrice(grandTotal)}</span>
                 </div>
 
                 {shippingFee > 0 && (
                   <div className="shipping-note">
                     <small>
-                      💡 Mua thêm {formatPrice((200000 - subtotal).toString())}{" "}
-                      để được miễn phí ship!
+                      💡 Mua thêm {formatPrice(200000 - subtotal)} để được miễn
+                      phí ship!
                     </small>
                   </div>
                 )}
