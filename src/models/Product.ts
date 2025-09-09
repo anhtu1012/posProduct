@@ -8,4 +8,6 @@ export interface Product {
   description: string;
   rating: number;
   reviews: number;
+  isBestSeller: boolean;
+  isActive: boolean;
 }

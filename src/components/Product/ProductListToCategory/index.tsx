@@ -38,7 +38,12 @@ function ProductListToCategory({
   }, []);
 
   useEffect(() => {
-    if (category) {
+    if (category === "isBestSeller") {
+      const filtered = products.filter(
+        (product) => product.isBestSeller === true
+      );
+      setFilteredProducts(filtered);
+    } else if (category) {
       const filtered = products.filter(
         (product) => product.categoryId === category
       );
@@ -52,14 +57,14 @@ function ProductListToCategory({
     if (!categoryId) return "Tất cả sản phẩm";
 
     const categoryMap: { [key: string]: string } = {
-      cafe_viet: "Cafe Việt",
-      cafe_may: "Cafe Máy",
-      cafe_da_xay: "Cafe Đá Xay",
-      tra: "Trà",
-      special_drinks: "Special Drinks",
-      nuoc_ep: "Nước ép - Sinh tố",
-      tra_sua: "Trà Sữa",
-      nuoc_ngot: "Nước Ngọt - Giải Khát",
+      1: "Cafe Việt",
+      2: "Cafe Máy",
+      3: "Cafe Đá Xay",
+      4: "Trà",
+      5: "Special Drinks",
+      6: "Nước ép - Sinh tố",
+      7: "Trà Sữa",
+      8: "Nước Ngọt - Giải Khát",
     };
     return categoryMap[categoryId] || categoryId;
   };
