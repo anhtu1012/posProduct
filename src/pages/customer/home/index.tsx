@@ -1,16 +1,18 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import ProductListToCategory from "../../../components/Product/ProductListToCategory";
 import { useBroadcastChannel } from "../../../hooks/useBroadcastChannel";
 import useSocket from "../../../hooks/useSocket";
-import type { Product } from "../../../models/Product";
+import type { Product } from "../../../types/Product";
 import { addToCart } from "../../../redux/features/cartSlice";
 import "./index.scss";
+import { CounterContext } from "../../../components/layout/CounterContext";
 
 function Home() {
   const dispartch = useDispatch();
   const broadCastAddtoCart = useBroadcastChannel<Product>("add-to-cart");
   const socket = useSocket();
+  const context = useContext(CounterContext);
 
   useEffect(() => {
     const handleGetProducts = (data: Product[]) => {
@@ -26,7 +28,7 @@ function Home() {
     (product: Product) => {
       broadCastAddtoCart.sendMessage(product);
     },
-    [broadCastAddtoCart]
+    [broadCastAddtoCart],
   );
 
   const handleAddToCart = (product: Product) => {
@@ -49,12 +51,13 @@ function Home() {
             onClick={() => {
               const productsSection =
                 document.getElementById("products-section");
+              context?.setCount(100 + context.count);
               if (productsSection) {
                 productsSection.scrollIntoView({ behavior: "smooth" });
               }
             }}
           >
-            Xem menu ngay
+            Xem menu ngay {context?.count}
           </button>
         </div>
       </section>
@@ -69,7 +72,7 @@ function Home() {
       </section>
       <section>
         <ProductListToCategory
-          category="1"
+          category="cafe_viet"
           title="Cafe đặc biệt"
           showTitle={true}
           onAddToCart={handleAddToCart}
@@ -77,7 +80,7 @@ function Home() {
       </section>
       <section>
         <ProductListToCategory
-          category="2"
+          category="cafe_may"
           title="Cafe Máy"
           showTitle={true}
           onAddToCart={handleAddToCart}
@@ -85,7 +88,7 @@ function Home() {
       </section>
       <section>
         <ProductListToCategory
-          category="3"
+          category="cafe_da_xay"
           title="Cafe Đá Xay"
           showTitle={true}
           onAddToCart={handleAddToCart}
@@ -93,7 +96,7 @@ function Home() {
       </section>
       <section>
         <ProductListToCategory
-          category="4"
+          category="tra"
           title="Trà đặc biệt"
           showTitle={true}
           onAddToCart={handleAddToCart}
@@ -101,7 +104,7 @@ function Home() {
       </section>
       <section>
         <ProductListToCategory
-          category="5"
+          category="special_drinks"
           title="Special Drinks đặc biệt"
           showTitle={true}
           onAddToCart={handleAddToCart}
@@ -109,7 +112,7 @@ function Home() {
       </section>
       <section>
         <ProductListToCategory
-          category="6"
+          category="nuoc_ep"
           title="Nước ép - Sinh tố"
           showTitle={true}
           onAddToCart={handleAddToCart}
@@ -117,7 +120,7 @@ function Home() {
       </section>
       <section>
         <ProductListToCategory
-          category="7"
+          category="tra_sua"
           title="Trà Sữa"
           showTitle={true}
           onAddToCart={handleAddToCart}
@@ -125,7 +128,7 @@ function Home() {
       </section>
       <section>
         <ProductListToCategory
-          category="8"
+          category="nuoc_ngot"
           title="Nước Ngọt - Giải Khát"
           showTitle={true}
           onAddToCart={handleAddToCart}

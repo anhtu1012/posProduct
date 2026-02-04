@@ -1,7 +1,7 @@
 import { MinusIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import type { CartItem } from "../../../models/CartItem";
+import type { CartItem } from "../../../types/CartItem";
 import {
   changeQuantity,
   remove,
@@ -10,7 +10,7 @@ import {
 } from "../../../redux/features/cartSlice";
 import "./index.scss";
 import { useBroadcastChannel } from "../../../hooks/useBroadcastChannel";
-import type { Product } from "../../../models/Product";
+import type { Product } from "../../../types/Product";
 import { useEffect, useState } from "react";
 import { formatPrice } from "../../../utils/formatPrice";
 

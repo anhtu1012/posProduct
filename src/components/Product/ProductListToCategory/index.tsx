@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import ProductCard from "../ProductCard";
-import type { Product } from "../../../models/Product";
-import { getProducts } from "../../../services/customer/home/api";
+import type { Product } from "../../../types/Product";
 import "./ProductListToCategory.scss";
+import { getProductsMain } from "../../../services/customer/home/api";
 
 interface ProductListToCategoryProps {
   category?: string;
@@ -24,8 +24,8 @@ function ProductListToCategory({
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const response = await getProducts();
-      setProducts(response.data);
+      const response = await getProductsMain(1000, 1);
+      setProducts(response.data.data);
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
@@ -40,13 +40,13 @@ function ProductListToCategory({
   useEffect(() => {
     if (category === "isBestSeller") {
       const filtered = products.filter(
-        (product) => product.isBestSeller === true
+        (product) => product.isBestSeller === true,
       );
+
       setFilteredProducts(filtered);
     } else if (category) {
-      const filtered = products.filter(
-        (product) => product.categoryId === category
-      );
+      const filtered =
+        products.filter((product) => product.categoryId === category) ?? [];
       setFilteredProducts(filtered);
     } else {
       setFilteredProducts(products);

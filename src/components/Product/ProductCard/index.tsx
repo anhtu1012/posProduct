@@ -2,7 +2,7 @@ import { HeartIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { HeartIcon as HeartSolidIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import "./ProductCard.scss";
-import type { Product } from "../../../models/Product";
+import type { Product } from "../../../types/Product";
 import { formatPrice } from "../../../utils/formatPrice";
 
 interface ProductCardProps {
@@ -23,20 +23,6 @@ function ProductCard({ product, onAddToCart }: ProductCardProps) {
     if (!discountPercent) return null;
     const originalPrice = Math.round(price / (1 - discountPercent / 100));
     return originalPrice;
-  };
-
-  const getCategoryName = (categoryId: string) => {
-    const categoryMap: { [key: string]: string } = {
-      1: "Cafe Việt",
-      2: "Cafe Máy",
-      3: "Cafe Đá Xay",
-      4: "Trà",
-      5: "Special Drinks",
-      6: "Nước ép - Sinh tố",
-      7: "Trà Sữa",
-      8: "Nước Ngọt - Giải Khát",
-    };
-    return categoryMap[categoryId] || categoryId;
   };
 
   const renderStars = (rating: number) => {
@@ -99,9 +85,7 @@ function ProductCard({ product, onAddToCart }: ProductCardProps) {
       </div>
 
       <div className="product-info">
-        <div className="product-category">
-          {getCategoryName(product.categoryId)}
-        </div>
+        <div className="product-category">{product.categoryName}</div>
         <h3 className="product-name">{product.name}</h3>
         <p className="product-description">{product.description}</p>
 

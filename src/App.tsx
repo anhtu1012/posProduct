@@ -4,6 +4,7 @@ import Checkout from "./pages/customer/checkout";
 import Layout from "./components/layout";
 import AdminLayout from "./components/layoutAdmin";
 import ManagerProduct from "./pages/admin/products";
+import DemoHook from "./pages/customer/demoHook";
 
 function App() {
   const router = createBrowserRouter([
@@ -14,6 +15,10 @@ function App() {
         {
           path: "/",
           element: <Home />,
+        },
+        {
+          path: "/demo-hook",
+          element: <DemoHook />,
         },
         {
           path: "/checkout",
